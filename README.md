@@ -101,3 +101,5 @@ panaderia-app/
 | `/registro/` · `/login/` · `/logout/` (POST) | Autenticación |
 | `/categorias/` · `/ingredientes/` · `/productos/` · `/pedidos/` | Listados (públicos) |
 | `<entidad>/nueva/` · `<entidad>/<pk>/` · `/editar/` · `/borrar/` | Crear, detalle, editar, borrar |
+
+- Proyecto listo para entrega.
