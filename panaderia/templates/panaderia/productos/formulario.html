@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block titulo %}{{ titulo }} — Panadería{% endblock %}
+{% block content %}
+<h1>{{ titulo }}</h1>
+<form method="post">
+    {% include "panaderia/_campos_formulario.html" %}
+    <button type="submit">Guardar</button>
+    <a href="{% url 'panaderia:producto_list' %}">Cancelar</a>
+</form>
+{% endblock %}

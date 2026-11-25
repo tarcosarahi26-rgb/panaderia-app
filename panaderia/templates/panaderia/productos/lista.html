@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% load permisos_tags %}
+{% block titulo %}Productos — Panadería{% endblock %}
+{% block content %}
+<h1>Productos</h1>
+{% if perms.panaderia.add_producto %}
+<p><a href="{% url 'panaderia:producto_create' %}">+ Nuevo producto</a></p>
+{% endif %}
+
+<form method="get">
+    <input type="text" name="q" value="{{ q }}" placeholder="Buscar producto">
+    <select name="categoria">
+        <option value="">Todas las categorías</option>
+        {% for c in categorias %}
+        <option value="{{ c.pk }}" {% if categoria_id == c.pk|stringformat:"s" %}selected{% endif %}>{{ c.nombre }}</option>
+        {% endfor %}
+    </select>
+    <button type="submit">Filtrar</button>
+    <a href="{% url 'panaderia:producto_list' %}">Limpiar</a>
+</form>
+
+<table border="1" cellpadding="4">
+    <thead>
+        <tr><th>Nombre</th><th>Categoría</th><th>Venta</th><th>Precio</th><th>Disponible</th><th>Creado por</th><th>Acciones</th></tr>
+    </thead>
+    <tbody>
+        {% for producto in productos %}
+        <tr>
+            <td><a href="{{ producto.get_absolute_url }}">{{ producto.nombre }}</a></td>
+            <td><a href="{{ producto.categoria.get_absolute_url }}">{{ producto.categoria.nombre }}</a></td>
+            <td>{{ producto.get_tipo_venta_display }}</td>
+            <td>${{ producto.precio }}</td>
+            <td>{% if producto.disponible %}Sí{% else %}No{% endif %}</td>
+            <td>{{ producto.creado_por.username|default:"—" }}</td>
+            <td>
+                {% if producto|puede_editar:user %}<a href="{% url 'panaderia:producto_update' producto.pk %}">Editar</a>{% endif %}
+                {% if producto|puede_eliminar:user %}<a href="{% url 'panaderia:producto_delete' producto.pk %}">Borrar</a>{% endif %}
+            </td>
+        </tr>
+        {% empty %}
+        <tr><td colspan="7">No hay productos todavía.</td></tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% include "panaderia/_paginacion.html" %}
+{% endblock %}

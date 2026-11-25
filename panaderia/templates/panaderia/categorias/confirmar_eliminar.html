@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block titulo %}Borrar categoría — Panadería{% endblock %}
+{% block content %}
+<h1>¿Borrar esta categoría?</h1>
+<p>Estás a punto de borrar <strong>{{ categoria }}</strong>. Esta acción no se puede deshacer.</p>
+<p>Si la categoría todavía tiene productos, el sistema no la borrará.</p>
+<form method="post">
+    {% csrf_token %}
+    <button type="submit">Sí, borrar</button>
+    <a href="{{ categoria.get_absolute_url }}">Cancelar</a>
+</form>
+{% endblock %}

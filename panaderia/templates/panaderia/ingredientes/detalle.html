@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block titulo %}{{ ingrediente.nombre }} — Panadería{% endblock %}
+{% block content %}
+<h1>{{ ingrediente.nombre }}</h1>
+<p><strong>Stock:</strong> {{ ingrediente.stock }} {{ ingrediente.get_unidad_display }}</p>
+<p><strong>Caducidad:</strong> {{ ingrediente.fecha_caducidad|default:"Sin fecha" }}</p>
+
+<h2>Productos que lo usan</h2>
+<ul>
+    {% for producto in productos %}
+    <li>
+        <a href="{{ producto.get_absolute_url }}">{{ producto.nombre }}</a>
+        — {{ producto.categoria.nombre }}
+    </li>
+    {% empty %}
+    <li>Ningún producto usa este ingrediente todavía.</li>
+    {% endfor %}
+</ul>
+
+{% if perms.panaderia.change_ingrediente %}<a href="{% url 'panaderia:ingrediente_update' ingrediente.pk %}">Editar</a>{% endif %}
+{% if perms.panaderia.delete_ingrediente %}<a href="{% url 'panaderia:ingrediente_delete' ingrediente.pk %}">Borrar</a>{% endif %}
+<a href="{% url 'panaderia:ingrediente_list' %}">← Volver a ingredientes</a>
+{% endblock %}

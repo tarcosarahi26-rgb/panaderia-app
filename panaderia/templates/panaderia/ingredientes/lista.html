@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block titulo %}Ingredientes — Panadería{% endblock %}
+{% block content %}
+<h1>Ingredientes</h1>
+{% if perms.panaderia.add_ingrediente %}
+<p><a href="{% url 'panaderia:ingrediente_create' %}">+ Nuevo ingrediente</a></p>
+{% endif %}
+
+<table border="1" cellpadding="4">
+    <thead><tr><th>Nombre</th><th>Stock</th><th>Caducidad</th><th>Usado en</th><th>Acciones</th></tr></thead>
+    <tbody>
+        {% for ingrediente in ingredientes %}
+        <tr>
+            <td><a href="{{ ingrediente.get_absolute_url }}">{{ ingrediente.nombre }}</a></td>
+            <td>{{ ingrediente.stock }} {{ ingrediente.get_unidad_display }}</td>
+            <td>{{ ingrediente.fecha_caducidad|default:"—" }}</td>
+            <td>{{ ingrediente.productos.count }} producto(s)</td>
+            <td>
+                {% if perms.panaderia.change_ingrediente %}<a href="{% url 'panaderia:ingrediente_update' ingrediente.pk %}">Editar</a>{% endif %}
+                {% if perms.panaderia.delete_ingrediente %}<a href="{% url 'panaderia:ingrediente_delete' ingrediente.pk %}">Borrar</a>{% endif %}
+            </td>
+        </tr>
+        {% empty %}
+        <tr><td colspan="5">No hay ingredientes todavía.</td></tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% include "panaderia/_paginacion.html" %}
+{% endblock %}

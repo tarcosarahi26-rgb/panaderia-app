@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block titulo %}Borrar producto — Panadería{% endblock %}
+{% block content %}
+<h1>¿Borrar este producto?</h1>
+<p>Estás a punto de borrar <strong>{{ producto }}</strong>. Esta acción no se puede deshacer.</p>
+<p>Si el producto tiene pedidos registrados, el sistema no lo borrará.</p>
+<form method="post">
+    {% csrf_token %}
+    <button type="submit">Sí, borrar</button>
+    <a href="{{ producto.get_absolute_url }}">Cancelar</a>
+</form>
+{% endblock %}

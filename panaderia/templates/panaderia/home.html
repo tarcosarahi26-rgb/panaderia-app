@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+
+{% block titulo %}Inicio — Panadería{% endblock %}
+
+{% block content %}
+<header class="hero-panel">
+    <h1>Panadería</h1>
+    <p>Panel de administración del menú y de los pedidos.</p>
+</header>
+
+<section class="stats-grid">
+    <div class="stat-card">
+        <h2>Categorías: {{ total_categorias }}</h2>
+        <ul>
+            <li><a href="{% url 'panaderia:categoria_list' %}">Ver categorías</a></li>
+            {% if perms.panaderia.add_categoria %}
+            <li><a href="{% url 'panaderia:categoria_create' %}">+ Nueva categoría</a></li>
+            {% endif %}
+        </ul>
+    </div>
+
+    <div class="stat-card">
+        <h2>Ingredientes: {{ total_ingredientes }}</h2>
+        <ul>
+            <li><a href="{% url 'panaderia:ingrediente_list' %}">Ver ingredientes</a></li>
+            {% if perms.panaderia.add_ingrediente %}
+            <li><a href="{% url 'panaderia:ingrediente_create' %}">+ Nuevo ingrediente</a></li>
+            {% endif %}
+        </ul>
+    </div>
+
+    <div class="stat-card">
+        <h2>Productos: {{ total_productos }} ({{ disponibles }} disponibles)</h2>
+        <ul>
+            <li><a href="{% url 'panaderia:producto_list' %}">Ver productos</a></li>
+            {% if perms.panaderia.add_producto %}
+            <li><a href="{% url 'panaderia:producto_create' %}">+ Nuevo producto</a></li>
+            {% endif %}
+        </ul>
+    </div>
+
+    <div class="stat-card">
+        <h2>Pedidos sin entregar: {{ pedidos_pendientes }}</h2>
+        <ul>
+            <li><a href="{% url 'panaderia:pedido_list' %}">Ver pedidos</a></li>
+            {% if perms.panaderia.add_pedido %}
+            <li><a href="{% url 'panaderia:pedido_create' %}">+ Nuevo pedido</a></li>
+            {% endif %}
+        </ul>
+    </div>
+</section>
+
+<section class="section-block">
+    <h2 class="section-title">Últimos productos agregados</h2>
+    <ul class="ultimos-list">
+        {% for producto in ultimos_productos %}
+        <li>
+            <a href="{{ producto.get_absolute_url }}">{{ producto.nombre }}</a>
+            — {{ producto.categoria.nombre }} — ${{ producto.precio }}
+        </li>
+        {% empty %}
+        <li class="empty-msg">Todavía no hay productos.</li>
+        {% endfor %}
+    </ul>
+</section>
+
+<section class="section-block">
+    <h2 class="section-title">Menú por categoría</h2>
+    <div class="menu-grid">
+        {% for categoria in categorias %}
+        <div class="categoria-box">
+            <h3><a href="{{ categoria.get_absolute_url }}">{{ categoria.nombre }}</a></h3>
+            <ul>
+                {% for producto in categoria.productos.all %}
+                <li>{{ producto.nombre }} — ${{ producto.precio }}</li>
+                {% empty %}
+                <li class="empty-msg">Sin productos en esta categoría.</li>
+                {% endfor %}
+            </ul>
+        </div>
+        {% empty %}
+        <p class="empty-msg">Todavía no hay categorías.</p>
+        {% endfor %}
+    </div>
+</section>
+{% endblock %}

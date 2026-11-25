@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block titulo %}{{ categoria.nombre }} — Panadería{% endblock %}
+{% block content %}
+<h1>{{ categoria.nombre }}</h1>
+<p>{{ categoria.descripcion|default:"Sin descripción." }}</p>
+
+<h2>Productos de esta categoría</h2>
+<ul>
+    {% for producto in productos %}
+    <li>
+        <a href="{{ producto.get_absolute_url }}">{{ producto.nombre }}</a>
+        — {{ producto.get_tipo_venta_display }} — ${{ producto.precio }}
+        {% if not producto.disponible %}<em>(no disponible)</em>{% endif %}
+    </li>
+    {% empty %}
+    <li>Esta categoría todavía no tiene productos.</li>
+    {% endfor %}
+</ul>
+<p><a href="{% url 'panaderia:producto_list' %}?categoria={{ categoria.pk }}">Ver todos en la lista de productos</a></p>
+
+{% if perms.panaderia.change_categoria %}<a href="{% url 'panaderia:categoria_update' categoria.pk %}">Editar</a>{% endif %}
+{% if perms.panaderia.delete_categoria %}<a href="{% url 'panaderia:categoria_delete' categoria.pk %}">Borrar</a>{% endif %}
+<a href="{% url 'panaderia:categoria_list' %}">← Volver a categorías</a>
+{% endblock %}

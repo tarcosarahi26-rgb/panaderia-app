@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% load permisos_tags %}
+{% block titulo %}{{ producto.nombre }} — Panadería{% endblock %}
+{% block content %}
+<h1>{{ producto.nombre }}</h1>
+<p><strong>Categoría:</strong> <a href="{{ producto.categoria.get_absolute_url }}">{{ producto.categoria.nombre }}</a></p>
+<p><strong>Venta:</strong> {{ producto.get_tipo_venta_display }}</p>
+<p><strong>Precio:</strong> ${{ producto.precio }}</p>
+<p><strong>Elaborado el:</strong> {{ producto.fecha_elaboracion }}</p>
+<p><strong>Disponible:</strong> {% if producto.disponible %}Sí{% else %}No{% endif %}</p>
+<p><strong>Creado por:</strong> {{ producto.creado_por.username|default:"—" }}</p>
+<p>{{ producto.descripcion|default:"Sin descripción." }}</p>
+
+<h2>Ingredientes</h2>
+<ul>
+    {% for ingrediente in ingredientes %}
+    <li><a href="{{ ingrediente.get_absolute_url }}">{{ ingrediente.nombre }}</a></li>
+    {% empty %}
+    <li>Sin ingredientes registrados.</li>
+    {% endfor %}
+</ul>
+
+<h2>Pedidos de este producto</h2>
+<ul>
+    {% for pedido in pedidos %}
+    <li>
+        <a href="{{ pedido.get_absolute_url }}">Pedido #{{ pedido.pk }}</a>
+        — {{ pedido.cliente }} — {{ pedido.cantidad }} u. — {{ pedido.get_estado_display }}
+    </li>
+    {% empty %}
+    <li>Todavía nadie lo ha pedido.</li>
+    {% endfor %}
+</ul>
+
+{% if producto|puede_editar:user %}<a href="{% url 'panaderia:producto_update' producto.pk %}">Editar</a>{% endif %}
+{% if producto|puede_eliminar:user %}<a href="{% url 'panaderia:producto_delete' producto.pk %}">Borrar</a>{% endif %}
+<a href="{% url 'panaderia:producto_list' %}">← Volver a productos</a>
+{% endblock %}

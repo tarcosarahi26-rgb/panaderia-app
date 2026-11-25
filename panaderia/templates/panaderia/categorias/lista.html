@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block titulo %}Categorías — Panadería{% endblock %}
+{% block content %}
+<h1>Categorías</h1>
+{% if perms.panaderia.add_categoria %}
+<p><a href="{% url 'panaderia:categoria_create' %}">+ Nueva categoría</a></p>
+{% endif %}
+
+<table border="1" cellpadding="4">
+    <thead><tr><th>Nombre</th><th>Productos</th><th>Acciones</th></tr></thead>
+    <tbody>
+        {% for categoria in categorias %}
+        <tr>
+            <td><a href="{{ categoria.get_absolute_url }}">{{ categoria.nombre }}</a></td>
+            <td>{{ categoria.productos.count }}</td>
+            <td>
+                {% if perms.panaderia.change_categoria %}<a href="{% url 'panaderia:categoria_update' categoria.pk %}">Editar</a>{% endif %}
+                {% if perms.panaderia.delete_categoria %}<a href="{% url 'panaderia:categoria_delete' categoria.pk %}">Borrar</a>{% endif %}
+            </td>
+        </tr>
+        {% empty %}
+        <tr><td colspan="3">No hay categorías todavía.</td></tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% include "panaderia/_paginacion.html" %}
+{% endblock %}

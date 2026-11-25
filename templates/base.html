@@ -1,0 +1,45 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block titulo %}Panadería{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'panaderia/css/estilos.css' %}">
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+    <nav class="site-nav">
+        <strong>🥖 Panadería</strong>
+        <a href="{% url 'panaderia:home' %}">Inicio</a>
+        <a href="{% url 'panaderia:categoria_list' %}">Categorías</a>
+        <a href="{% url 'panaderia:ingrediente_list' %}">Ingredientes</a>
+        <a href="{% url 'panaderia:producto_list' %}">Productos</a>
+        <a href="{% url 'panaderia:pedido_list' %}">Pedidos</a>
+        <span class="usuario">
+        {% if user.is_authenticated %}
+            Hola, <strong>{{ user.username }}</strong>
+            <form method="post" action="{% url 'panaderia:logout' %}">
+                {% csrf_token %}
+                <button type="submit">Salir</button>
+            </form>
+        {% else %}
+            <a href="{% url 'panaderia:login' %}">Entrar</a>
+            <a href="{% url 'panaderia:registro' %}">Registrarse</a>
+        {% endif %}
+        </span>
+    </nav>
+
+    {% if messages %}
+    <ul class="mensajes">
+        {% for mensaje in messages %}
+            <li class="{{ mensaje.tags }}">{{ mensaje }}</li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+
+    <main class="contenedor">
+        {% block content %}{% endblock %}
+    </main>
+</body>
+</html>

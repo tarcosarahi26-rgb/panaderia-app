@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% load permisos_tags %}
+{% block titulo %}Pedido #{{ pedido.pk }} — Panadería{% endblock %}
+{% block content %}
+<h1>Pedido #{{ pedido.pk }}</h1>
+<p><strong>Cliente:</strong> {{ pedido.cliente }}</p>
+<p><strong>Producto:</strong> <a href="{{ pedido.producto.get_absolute_url }}">{{ pedido.producto.nombre }}</a>
+   (categoría <a href="{{ pedido.producto.categoria.get_absolute_url }}">{{ pedido.producto.categoria.nombre }}</a>)</p>
+<p><strong>Cantidad:</strong> {{ pedido.cantidad }}</p>
+<p><strong>Total:</strong> ${{ pedido.total }}</p>
+<p><strong>Estado:</strong> {{ pedido.get_estado_display }}</p>
+<p><strong>Pedido el:</strong> {{ pedido.fecha_pedido }} — <strong>Entrega:</strong> {{ pedido.fecha_entrega }}</p>
+<p><strong>Registrado por:</strong> {{ pedido.creado_por.username|default:"—" }}</p>
+
+{% if pedido|puede_editar:user %}<a href="{% url 'panaderia:pedido_update' pedido.pk %}">Editar</a>{% endif %}
+{% if pedido|puede_eliminar:user %}<a href="{% url 'panaderia:pedido_delete' pedido.pk %}">Borrar</a>{% endif %}
+<a href="{% url 'panaderia:pedido_list' %}">← Volver a pedidos</a>
+{% endblock %}

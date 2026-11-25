@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block titulo %}Borrar ingrediente — Panadería{% endblock %}
+{% block content %}
+<h1>¿Borrar este ingrediente?</h1>
+<p>Estás a punto de borrar <strong>{{ ingrediente }}</strong>. Se quitará de los productos que lo usan.</p>
+<form method="post">
+    {% csrf_token %}
+    <button type="submit">Sí, borrar</button>
+    <a href="{{ ingrediente.get_absolute_url }}">Cancelar</a>
+</form>
+{% endblock %}
