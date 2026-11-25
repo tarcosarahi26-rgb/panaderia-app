@@ -1,86 +1,127 @@
 {% extends "base.html" %}
 
 {% block titulo %}Inicio — Panadería{% endblock %}
+{% block main_class %}ancho-completo{% endblock %}
 
 {% block content %}
-<header class="hero-panel">
+<!-- Portada roja -->
+<section class="hero">
     <h1>Panadería</h1>
-    <p>Panel de administración del menú y de los pedidos.</p>
-</header>
-
-<section class="stats-grid">
-    <div class="stat-card">
-        <h2>Categorías: {{ total_categorias }}</h2>
-        <ul>
-            <li><a href="{% url 'panaderia:categoria_list' %}">Ver categorías</a></li>
-            {% if perms.panaderia.add_categoria %}
-            <li><a href="{% url 'panaderia:categoria_create' %}">+ Nueva categoría</a></li>
-            {% endif %}
-        </ul>
-    </div>
-
-    <div class="stat-card">
-        <h2>Ingredientes: {{ total_ingredientes }}</h2>
-        <ul>
-            <li><a href="{% url 'panaderia:ingrediente_list' %}">Ver ingredientes</a></li>
-            {% if perms.panaderia.add_ingrediente %}
-            <li><a href="{% url 'panaderia:ingrediente_create' %}">+ Nuevo ingrediente</a></li>
-            {% endif %}
-        </ul>
-    </div>
-
-    <div class="stat-card">
-        <h2>Productos: {{ total_productos }} ({{ disponibles }} disponibles)</h2>
-        <ul>
-            <li><a href="{% url 'panaderia:producto_list' %}">Ver productos</a></li>
-            {% if perms.panaderia.add_producto %}
-            <li><a href="{% url 'panaderia:producto_create' %}">+ Nuevo producto</a></li>
-            {% endif %}
-        </ul>
-    </div>
-
-    <div class="stat-card">
-        <h2>Pedidos sin entregar: {{ pedidos_pendientes }}</h2>
-        <ul>
-            <li><a href="{% url 'panaderia:pedido_list' %}">Ver pedidos</a></li>
-            {% if perms.panaderia.add_pedido %}
-            <li><a href="{% url 'panaderia:pedido_create' %}">+ Nuevo pedido</a></li>
-            {% endif %}
-        </ul>
-    </div>
+    <p>Panel de administración del menú y de los pedidos. Masa, mantequilla y un poco de caos convertidos en pan perfecto.</p>
+    <div class="hero-pan" aria-hidden="true">🥐🥐🥐</div>
 </section>
 
-<section class="section-block">
-    <h2 class="section-title">Últimos productos agregados</h2>
-    <ul class="ultimos-list">
-        {% for producto in ultimos_productos %}
-        <li>
-            <a href="{{ producto.get_absolute_url }}">{{ producto.nombre }}</a>
-            — {{ producto.categoria.nombre }} — ${{ producto.precio }}
-        </li>
-        {% empty %}
-        <li class="empty-msg">Todavía no hay productos.</li>
-        {% endfor %}
-    </ul>
-</section>
-
-<section class="section-block">
-    <h2 class="section-title">Menú por categoría</h2>
-    <div class="menu-grid">
-        {% for categoria in categorias %}
-        <div class="categoria-box">
-            <h3><a href="{{ categoria.get_absolute_url }}">{{ categoria.nombre }}</a></h3>
-            <ul>
-                {% for producto in categoria.productos.all %}
-                <li>{{ producto.nombre }} — ${{ producto.precio }}</li>
-                {% empty %}
-                <li class="empty-msg">Sin productos en esta categoría.</li>
-                {% endfor %}
-            </ul>
+<!-- Módulos -->
+<section class="bloque crema">
+    <div class="bloque-interno proof">
+        <div class="foto-grande" aria-hidden="true">🥖🥐🥨</div>
+        <div>
+            <h2>Todo el menú <span class="acento">en un lugar</span></h2>
+            <div class="modulos">
+                <div class="modulo">
+                    <span class="numero">{{ total_categorias }}</span>
+                    <h3>Categorías</h3>
+                    <ul>
+                        <li><a href="{% url 'panaderia:categoria_list' %}">Ver categorías</a></li>
+                        {% if perms.panaderia.add_categoria %}
+                        <li><a href="{% url 'panaderia:categoria_create' %}">+ Nueva categoría</a></li>
+                        {% endif %}
+                    </ul>
+                </div>
+                <div class="modulo">
+                    <span class="numero">{{ total_ingredientes }}</span>
+                    <h3>Ingredientes</h3>
+                    <ul>
+                        <li><a href="{% url 'panaderia:ingrediente_list' %}">Ver ingredientes</a></li>
+                        {% if perms.panaderia.add_ingrediente %}
+                        <li><a href="{% url 'panaderia:ingrediente_create' %}">+ Nuevo ingrediente</a></li>
+                        {% endif %}
+                    </ul>
+                </div>
+                <div class="modulo">
+                    <span class="numero">{{ total_productos }}</span>
+                    <h3>Productos ({{ disponibles }} disponibles)</h3>
+                    <ul>
+                        <li><a href="{% url 'panaderia:producto_list' %}">Ver productos</a></li>
+                        {% if perms.panaderia.add_producto %}
+                        <li><a href="{% url 'panaderia:producto_create' %}">+ Nuevo producto</a></li>
+                        {% endif %}
+                    </ul>
+                </div>
+                <div class="modulo">
+                    <span class="numero">{{ pedidos_pendientes }}</span>
+                    <h3>Pedidos sin entregar</h3>
+                    <ul>
+                        <li><a href="{% url 'panaderia:pedido_list' %}">Ver pedidos</a></li>
+                        {% if perms.panaderia.add_pedido %}
+                        <li><a href="{% url 'panaderia:pedido_create' %}">+ Nuevo pedido</a></li>
+                        {% endif %}
+                    </ul>
+                </div>
+            </div>
         </div>
-        {% empty %}
-        <p class="empty-msg">Todavía no hay categorías.</p>
-        {% endfor %}
     </div>
+</section>
+
+<!-- Últimos productos -->
+<section class="bloque blanco">
+    <div class="bloque-interno">
+        <h2 class="titulo-linea">Últimos productos</h2>
+        <div class="productos-grid">
+            {% for producto in ultimos_productos %}
+            <div class="tarjeta-producto">
+                <div class="foto" aria-hidden="true">🥐</div>
+                <a class="pildora" href="{{ producto.get_absolute_url }}">{{ producto.nombre }}</a>
+                <p>{{ producto.categoria.nombre }} — ${{ producto.precio }}</p>
+            </div>
+            {% empty %}
+            <p class="empty-msg">Todavía no hay productos.</p>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<!-- Menú por categoría -->
+<section class="bloque rojo">
+    <div class="bloque-interno">
+        <h2>El menú por <span class="acento">categoría</span></h2>
+        <div class="menu-grid">
+            {% for categoria in categorias %}
+            <div class="categoria-box">
+                <h3><a href="{{ categoria.get_absolute_url }}">{{ categoria.nombre }}</a></h3>
+                <ul>
+                    {% for producto in categoria.productos.all %}
+                    <li>{{ producto.nombre }} — ${{ producto.precio }}</li>
+                    {% empty %}
+                    <li class="empty-msg">Sin productos en esta categoría.</li>
+                    {% endfor %}
+                </ul>
+            </div>
+            {% empty %}
+            <p>Todavía no hay categorías.</p>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<!-- Invitación final -->
+<section class="cierre">
+    <div class="cierre-texto">
+        <h2>¿Listo para <span class="acento">hornear</span> el día?</h2>
+        {% if user.is_authenticated %}
+        <p>Revisa los pedidos pendientes y mantén el menú al día.</p>
+        <div class="acciones">
+            <a class="btn" href="{% url 'panaderia:pedido_list' %}">Ver pedidos</a>
+            <a class="btn claro" href="{% url 'panaderia:producto_list' %}">Ver productos</a>
+        </div>
+        {% else %}
+        <p>Crea tu cuenta o inicia sesión para registrar productos y pedidos.</p>
+        <div class="acciones">
+            <a class="btn" href="{% url 'panaderia:registro' %}">Registrarme</a>
+            <a class="btn claro" href="{% url 'panaderia:login' %}">Entrar</a>
+        </div>
+        {% endif %}
+    </div>
+    <div class="cierre-foto" aria-hidden="true">🥖</div>
 </section>
 {% endblock %}

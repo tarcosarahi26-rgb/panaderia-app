@@ -10,7 +10,7 @@
 </head>
 <body>
     <nav class="site-nav">
-        <strong>🥖 Panadería</strong>
+        <strong>Panadería</strong>
         <a href="{% url 'panaderia:home' %}">Inicio</a>
         <a href="{% url 'panaderia:categoria_list' %}">Categorías</a>
         <a href="{% url 'panaderia:ingrediente_list' %}">Ingredientes</a>
@@ -38,7 +38,7 @@
     </ul>
     {% endif %}
 
-    <main class="contenedor">
+    <main class="contenedor {% block main_class %}{% endblock %}">
         {% block content %}{% endblock %}
     </main>
 </body>
